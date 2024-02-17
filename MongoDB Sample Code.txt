@@ -1,0 +1,184 @@
+//MongoDb using CMD
+//To show database
+ show dbs
+
+//To create new database
+ use name_of_db
+ ex: use SpeechRecognitionResultList
+
+//To create new table/Collection
+db.createCollection('table_name')
+ex: db.createCollection('school')
+
+
+//To insert, this is the example
+db.student.insert({
+    firstname: 'Mark Jastine',
+    lastName: 'Siena',
+    age: 20,
+    hobbies: ['acting','dancing','basketball'],
+    parent: {
+        mother: 'Nanay',
+        father: 'tatay'
+    }
+})
+
+//to view
+db.student.find().pretty()
+
+//to insert multiple table
+//Many is a built in function
+//encapsulate in an array
+db.students.insertMany([
+    {
+    firstname: 'abc',
+    lastname : 'xyz',
+    age: 12
+    },
+     {
+    firstname: 'jean',
+    lastname : 'garcia',
+    age: 15
+    },
+     {
+    firstname: 'Rommel',
+    lastname : 'banas',
+    age: 19
+    }
+])
+
+//Sorting, Filtering and Finding
+
+//specific finding
+db.students.find({lastname: 'garcia'}).pretty()
+
+//sorting
+//1 means ascending
+//-1 means decending
+db.students.find().sort({firstname : 1}).pretty();
+
+//to get the count
+db.students.find().count()
+
+//combination of find and count
+//note: pretty() must not at the end, otherwise error
+db.students.find({lastname : 'cruz'}).count()
+
+
+//trying to insert
+db.students.insertMany([
+    {
+    firstname: 'andy',
+    lastname: 'cruz',
+    address: 'Ilocos',
+    age: 40,
+    hobbies : ['Swimming','Cooking']
+    },
+    {
+    firstname: 'jim',
+    lastname: 'jane',
+    address: 'Batanes',
+    age: 32,
+    hobbies : ['Surfing','Sport']
+    },
+    {
+    firstname: 'Miko',
+    lastname: 'cruz',
+    address: 'Batangas',
+    age: 30,
+    hobbies : ['Animation','Paintings']
+    }
+
+
+])
+
+//to get the 1st data
+db.students.find().limit(1)
+
+//to retrieve data
+db.students.find().foreach(function(doc){
+    //displaying in mongodb
+    print(doc)
+})
+
+//displaying data using foreach loop
+db.students.find().forEach(function(doc){
+    print('Students Firstname ' + doc.firstname)
+})
+
+//converting into es6
+db.students.find().sort().forEach(doc => {
+    print('Students Lastname: ' + doc.lastname)
+})
+
+
+//Looping all the information using foreach loop (ES6)
+db.students.find().forEach(doc => {
+    print('Firsname: ' + doc.firstname)
+    print('Lastname: ' + doc.lastname)
+    print('Address: ' + doc.address)
+    print('Age: ' + doc.age)
+    print('Hobbies: ' + doc.hobbies)
+    print('')
+})
+
+//getting the specific array
+
+db.students.find().limit(1).sort().forEach(doc => {
+    print(doc.hobbies[0])
+})
+
+//to update
+db.students.update({ _id: ObjectId('65cf5af1ae4c19f119b1b724')},
+{
+    firstname: 'Paulo',
+    lastname: 'cruz',
+    address: 'Ilocos',
+    age: 77,
+    hobbies: [ 'Swimming', 'Cooking' ]
+})
+
+//trying to rename a  key object
+//$rename is a built in function
+db.students.update({ _id: ObjectId('65cf580dae4c19f119b1b721')},{ 
+    $rename : { age: 'AgE'}
+})
+
+db.students.update({  _id: ObjectId('65cf580dae4c19f119b1b723')},{
+     $rename : { firstname: 'FirstName'}
+})
+
+//trying  to rename key pair
+//use the $set built in function
+db.students.update({  _id: ObjectId('65cf580dae4c19f119b1b723')},{ 
+    $set : { FirstName: 'Patrick'}
+})
+
+//increment only note in integer
+//inc means increment
+//2 means +2
+db.students.update({ _id: ObjectId('65cf5af1ae4c19f119b1b726')},{
+    $inc : {age: 2}
+})
+
+//to delete
+db.students.remove({ _id: ObjectId('65cf580dae4c19f119b1b723')})
+
+//increment only note in integer
+//inc means increment
+//2 means +2
+db.students.update({ _id: ObjectId('65cf5af1ae4c19f119b1b726')},{
+    $inc : {age: 2}
+})
+
+//to delete
+db.students.remove({ _id: ObjectId('65cf580dae4c19f119b1b723')})
+
+//wildcard seach
+//gt means greater than
+//gt is a built in function
+db.students.find({ age: {$gt : 16}}).pretty()
+
+//less than
+//lte means less than
+db.students.find({ age: {$lte : 16}})
